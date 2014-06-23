@@ -18,23 +18,23 @@ This should do the trick.
 To scrape a website with **R3ap** type the following into your terminal …
 
 	$ cd path/to/r3ap
-	$ ./bin/r3ap parse --db <db name> --source <website URI> --amount <amount of pages to store>
+	$ ./bin/r3ap parse -u <website URI> [-a <amount of pages to store>]
 
 For example:
 
-	$ ./bin/r3ap parse --db nyt --source http://www.nytimes.com --amount 10
+	$ ./bin/r3ap parse -u http://www.nytimes.com -a 10
 
-This will store 10 pages of the New York Times' website into the database "nyt".
+This will store 10 pages of the New York Times' website into the database.
 
-To list the stored pages of a website, enter the following into your terminal:
+To list the stored pages enter the following into your terminal:
 
-	$ ./bin/r3ap list --db nyt
+	$ ./bin/r3ap list
 
-This will ouput the contents of the "nyt" database as a useless flat list.
+This will ouput the contents of the database as a useless flat list.
 
 It's also possible to list only the pages of a specific source:
 
-	$ ./bin/r3ap list --db nyt --source http://www.nytimes.com
+	$ ./bin/r3ap list -u http://www.nytimes.com
 
 ## Footnote
 
