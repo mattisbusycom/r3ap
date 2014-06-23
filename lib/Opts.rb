@@ -11,13 +11,13 @@ class Opts
     OptionParser.new do |opt|
       args.each do |arg|
         arg = arg[/[^:]+/]
-        opt.on("--" + arg + " " + arg.upcase) { |val| @options[arg.to_sym] = val }
+        opt.on("-" + arg + " " + arg.upcase) { |val| @options[arg.to_sym] = val }
       end
       opt.parse!
     end
     args.each do |arg|
       next if arg.match(/^:/)
-      raise "Please define '--#{arg[/[^:]+/]}'." if @options[arg.to_sym].nil?
+      raise "Please define '-#{arg[/[^:]+/]}'." if @options[arg.to_sym].nil?
     end
   end
 

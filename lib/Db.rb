@@ -38,9 +38,9 @@ class Db
     @db = SQLite3::Database.new @name
     @db.execute <<-SQL
       CREATE TABLE IF NOT EXISTS pages (
-        id    INTEGER PRIMARY KEY AUTOINCREMENT,
-        uri   VARCHAR(256),
-        title VARCHAR(256)
+        uri     VARCHAR(256) PRIMARY KEY,
+        title   VARCHAR(256),
+        created datetime default current_timestamp
       )
     SQL
   end

@@ -7,12 +7,10 @@ class Parser
   # Setting up the parser
   # 
   # Params:
-  # +dbname+:: The name of the database to store the results
   # +uri+::    The URI of the website
-  def initialize (dbname, uri)
-    raise "Please define a database name." if dbname.nil?
+  def initialize (uri)
     raise "Please define a URI." if uri.nil?
-    @db = Db.new(dbname)
+    @db = Db.new("r3ap")
     @uris = [uri]
     @internal = /^(\.?\/|#{uri[/[^\/]+\/\/[^\/]+/i]})/i
   end
@@ -29,7 +27,6 @@ class Parser
       exit if @max <= 0
       if @db.select("uri", @uris[0]).empty?
         scrape(@uris[0])
-        puts ">> " + @uris[0]
       end
       @uris.shift
     end
@@ -50,6 +47,7 @@ class Parser
     title = doc.css("title")
     return if title.empty?
     @db.insert(uri, title.first.text)
+    puts ">> " + uri
     @max -= 1
     doc.css("a").each do |anchor|
       href = anchor.attr("href")

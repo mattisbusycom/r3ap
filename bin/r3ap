@@ -6,28 +6,32 @@ require_relative "../lib/Db"
 
 case ARGV[0]
   when "parse"
-    opts = Opts.new("db", "source", ":amount")
-    parser = Parser.new(opts.get("db"), opts.get("source"))
-    parser.read(opts.get("amount"))
+    opts = Opts.new("u", ":a")
+    parser = Parser.new(opts.get("u"))
+    parser.read(opts.get("a"))
   when "list"
-    opts = Opts.new("db", ":source")
-    db = Db.new(opts.get("db"))
-    if opts.get("source")
-      puts ">> " + db.select("uri", opts.get("source")).join("\r\n>> ")
+    opts = Opts.new(":u")
+    db = Db.new("r3ap")
+    if opts.get("u")
+      puts ">> " + db.select("uri", opts.get("u")).join("\r\n>> ")
     else
       puts ">> " + db.select.join("\r\n>> ")
     end
   when "help"
     puts <<-HELP
-      r3ap is a tool for scraping websites and storing the result in a SQLite3 database.
+    
+      r3ap is a tool for scraping websites and storing the result in
+      a SQLite3 database.
 
       Usage:
 
-      `r3ap parse --db <db name> --source <website uri> [--amount <amount of pages>]`
-          => Scrapes the defined website, stores the result in the defined database and stops after the limit defined by "--amount" is reached.
+      `r3ap parse -u <website uri> [-a <amount of pages>]`
+          => Scrapes the defined website, stores the result in the database
+             and stops after the limit defined by "-a" is reached.
 
-      `r3ap list --db <db name> [--source <website uri>]`
-          => Outputs the contents of the defined database as flat list. Selects only the result of a specific website if "--source" is set.
+      `r3ap list [-u <website uri>]`
+          => Outputs the contents of the defined database as flat list. Selects
+          only the result of a specific website if "-u" is set.
 
       `r3ap help`
           => Print the tool's description.
