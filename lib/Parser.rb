@@ -34,26 +34,28 @@ class Parser
 
   protected
 
-  # Gets and stores the contents of a website's page
-  # 
-  # Params:
-  # +uri+:: The page's URI
-  def scrape (uri)
-    begin
-      doc = Nokogiri::HTML(open(uri))
-    rescue
-      return
+  # Loading a page's contents and omitting everything
+  # that's not of the type "text/html"
+  def load (uri)
+    open(uri) do |file|
+      yield file if file.content_type == "text/html"
     end
-    title = doc.css("title")
-    return if title.empty?
-    @db.insert(uri, title.first.text)
-    puts ">> " + uri
-    @max -= 1
-    doc.css("a").each do |anchor|
-      href = anchor.attr("href")
-      next if href.nil?
-      next unless @uris.index(href).nil? and href.match(@internal)
-      @uris << href[/^[^#]+/]
+  end
+
+  # Gets and stores the contents of a website's page
+  def scrape (uri)
+    load(uri) do |file|
+      doc = Nokogiri::HTML(file)
+      title = doc.css("title")
+      @db.insert(uri, title.first.text)
+      puts ">> " + uri
+      @max -= 1
+      doc.css("a").each do |anchor|
+        href = anchor.attr("href")
+        next if href.nil?
+        next unless @uris.index(href).nil? and href.match(@internal)
+        @uris << href[/^[^#]+/]
+      end
     end
   end
 
